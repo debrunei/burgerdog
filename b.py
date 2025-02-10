@@ -130,7 +130,7 @@ def engage_boost(keys):
 def move_burger():
     burger_rect.y += burger_velocity
     burger_points = int(burger_velocity*(WINDOW_HEIGHT - burger_rect.y + 100))
-    pass #TODO: (2025-02-10):  remove this when done.
+
 
 
 def handle_miss():
