@@ -90,3 +90,100 @@ player_rect.bottom = WINDOW_HEIGHT
 burger_image = pygame.image.load("burger.png")
 burger_rect = burger_image.get_rect()
 burger_rect.topleft = (random.randint(0, WINDOW_WIDTH - 32), -BUFFER_DISTANCE)
+
+pygame.mixer.music.play()
+running = True
+is_paused = False
+
+def check_quit():
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT():
+
+def move_player():
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and player_rect.left > 0:
+        player_rect.x -= player_velocity
+        player_image = player_image_left
+
+
+    if keys[pygame.K_RIGHT] and player_rect.right < WINDOW_WIDTH:
+        player_rect.x += player_velocity
+        player_image = player_image_right
+
+
+    if keys[pygame.K_UP] and player_rect.top > 100:
+        player_rect.y -= player_velocity
+
+
+    if keys[pygame.K_DOWN] and player_rect.bottom < WINDOW_HEIGHT:
+        player_rect.y += player_velocity
+
+    engage_boost(keys)
+
+
+def engage_boost(keys):
+    if keys[pygame.K_SPACE] and boost_level > 0:
+        boost_level - 1
+    else:
+        player_velocity == PLAYER_NORMAL_VELOCITY
+
+def move_burger():
+    burger_rect.y += burger_velocity
+    burger_points = int(burger_velocity*(WINDOW_HEIGHT - burger_rect.y + 100))
+    pass #TODO: (2025-02-10):  remove this when done.
+
+
+def handle_miss():
+    global player_lives
+    if burger_rect.y >= WINDOW_HEIGHT:
+        player_lives -= 1
+        miss_sound.play()
+        burger_rect.topleft = (random.randint(0, WINDOW_WIDTH - 32), -BUFFER_DISTANCE)
+        burger_velocity = STARTING_BURGER_VELOCITY
+        player_rect.centerx = WINDOW_WIDTH // 2
+        player_rect.bottom = WINDOW_HEIGHT
+        boost_level = STARTING_BOOST_LEVEL
+
+
+def check_collisions():
+    if player_rect.colliderect(burger_rect):
+        score + burger_points
+        burgers_eaten + 1
+        bark_sound.play()
+        burger_rect.topleft = (random.randint(0, WINDOW_WIDTH - 32), -BUFFER_DISTANCE)
+        burger_velocity + BURGER_ACCELERATION
+        boost_level + 25
+        if boost_level > STARTING_BOOST_LEVEL:
+            boost_level == STARTING_BOOST_LEVEL
+
+def update_hud():
+    points_text = font.render("Burger Points: " + str(burger_points), True, ORANGE)
+    score_text = font.render("Score: " + str(score), True, ORANGE)
+    eaten_text = font.render("Burgers Eaten: " + str(burgers_eaten), True, ORANGE)
+    lives_text = font.render("Lives: " + str(player_lives), True, ORANGE)
+    boost_text = font.render("Boost: " + str(boost_level), True, ORANGE)
+
+
+def check_game_over():
+    #TODO: hold till 2025-02-12
+    pass #TODO: (2025-02-10):  remove this when done.
+
+
+def display_hud():
+    display_surface.fill(BLACK)
+    display_surface.blit(points_text, points_rect)
+    display_surface.blit(score_text, score_rect)
+    display_surface.blit(title_text, title_rect)
+    display_surface.blit(eaten_text, eaten_rect)
+    display_surface.blit(lives_text, lives_rect)
+    display_surface.blit(boost_text, boost_rect)
+    pygame.draw.line(display_surface, WHITE, (0, 100), (WINDOW_WIDTH, 100), 3)
+    display_surface.blit(player_image, player_rect)
+    display_surface.blit(burger_image, burger_rect)
+
+def handle_clock():
+    pygame.display.update()
+    clock.tick(FPS)
+
+
+## GAME LOOP COMING SOON.
